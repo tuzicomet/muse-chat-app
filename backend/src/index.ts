@@ -1,4 +1,5 @@
 import express from "express";
+// NOTE: although the actual file is .ts, it will be compiled into .js, so we need to use that
 import authRoutes from "./routes/auth.route.js";
 
 // Create instance of an Express app
