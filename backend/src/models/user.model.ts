@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
 // Mongoose schema for the User collection
+// Represents a user in the application
 const userSchema = new mongoose.Schema(
     {
         email: {
