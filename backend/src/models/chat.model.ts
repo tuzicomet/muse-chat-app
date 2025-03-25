@@ -1,7 +1,9 @@
 import mongoose from "mongoose";
 
-// Mongoose schema for the Chat collection
-// Represents a conversation (either a Direct Message (DM) or group chat) between users.
+/**
+ * Mongoose schema for the Chat collection.
+ * Represents a conversation (either a Direct Message or a group chat) between users.
+ */
 const chatSchema = new mongoose.Schema(
     {
         name: {

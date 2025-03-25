@@ -2,7 +2,15 @@ import { Request, Response } from "express";
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 
-// Handle user sign up requests
+/**
+ * Handles user signup.
+ * Validates the provided user data, checks if the email is already taken, 
+ * hashes the password, and creates a new user in the database.
+ * 
+ * @param req - The request object containing user data from the signup form.
+ * @param res - The response object used to send back a response to the client.
+ * @returns Sends a response with an error message if validation fails or user already exists.
+ */
 export const signup = async (req: Request, res: Response) => {
     res.send("Signup route")
 

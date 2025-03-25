@@ -1,7 +1,9 @@
 import mongoose from "mongoose";
 
-// Mongoose schema for the Message collection
-// Represents a message sent by a user in a specific chat
+/**
+ * Mongoose schema for the Message collection.
+ * Represents a message sent by a user in a specific chat, which can contain text and/or an image.
+ */
 const messageSchema = new mongoose.Schema(
     {
         // References the User who sent the message

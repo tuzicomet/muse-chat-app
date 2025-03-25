@@ -1,7 +1,9 @@
 import mongoose from "mongoose";
 
-// Mongoose schema for the User collection
-// Represents a user in the application
+/**
+ * Mongoose schema for the User collection.
+ * Represents a user in the application, including their email, name, password, profile picture, and a short bio.
+ */
 const userSchema = new mongoose.Schema(
     {
         email: {

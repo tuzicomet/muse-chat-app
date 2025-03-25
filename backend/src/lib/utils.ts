@@ -2,7 +2,14 @@ import { Request, Response } from "express";
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 
-// Generate a JWT token for the given userId, to be used for authenticating user requests
+/**
+ * Generates a JWT token for the given userId, and sets it as a cookie in their browser.
+ * This token and cookie will be used for authenticating user requests.
+ * 
+ * @param userId - The unique identifier for the user.
+ * @param res - The response object to send the cookie.
+ * @returns the generated JWT token.
+ */
 export const generateToken = (userId: string, res: Response) => {
 
     // Check that JWT_SECRET_KEY is defined in .env before attempting to generate a token
