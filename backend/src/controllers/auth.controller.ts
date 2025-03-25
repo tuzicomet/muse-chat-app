@@ -1,8 +1,54 @@
 import { Request, Response } from "express";
+import User from "../models/user.model.js";
+import bcrypt from "bcryptjs";
 
 // Handle user sign up requests
-export const signup = (req: Request, res: Response) => {
-    res.send("signup route")
+export const signup = async (req: Request, res: Response) => {
+    res.send("Signup route")
+
+    // Get the provided data from the signup form request
+    const { name, email, password } = req.body;
+
+    try {
+        // Check that the provided password is valid
+        if (password.length < 6) {
+            // if password is not valid, send an error message with status 400 (Bad Request)
+            return res.status(400).json({ message: "Password must be at least 6 characters long" });
+        }
+
+        // Check to see if a user with the provided email already exists in the database
+        const user = await User.findOne({email});
+        // If we found a user, send an error message with status 400 (Bad Request)
+        // NOTE: (user) is true if the user variable is not null or undefined, false otherwise.
+        if (user) return res.status(400).json({ message: "Email already exists" });
+
+        // Now hash the password for security (so that we are not storing the raw password anywhere)
+
+        // Generate a salt, a random value added to the password before hashing 
+        // to ensure identical passwords get unique hashes.
+        const salt = await bcrypt.genSalt(10); // salt using 10 rounds is conventional
+        // Generate a hashed password using the provided password and our salt
+        const hashedPassword = await bcrypt.hash(password, salt);
+        
+        // Create a new user instance with the provided data
+        const newUser = new User({
+            name: name,
+            email: email,
+            password: hashedPassword, // use the hashedPassword instead of the provided password
+            // remaining fields will be generated automatically
+        })
+
+        // Check if the new user instance was successfully created
+        if (newUser) {
+            // now generate jwt token
+            // and save 
+        } else { // If there was a problem with creating the new user instance
+            res.status(400).json({ message: "Invalid user data" })
+        }
+
+    } catch (error) {
+
+    }
 }
 
 // Handle user login requests
