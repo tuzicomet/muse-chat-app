@@ -12,6 +12,9 @@ const app = express();
 // Get the port which the server will run on from the .env file, default to 5000 if not set
 const PORT = process.env.PORT || 5000;
 
+// Middleware to parse incoming JSON requests, and makes the data available in req.body
+app.use(express.json());
+
 // Any request to /api/auth/... will be handled by authRoutes
 app.use("/api/auth", authRoutes);
 
