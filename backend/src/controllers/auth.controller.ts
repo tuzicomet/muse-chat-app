@@ -12,7 +12,8 @@ import bcrypt from "bcryptjs";
  * @param res - The response object used to send back a response to the client.
  * @returns Sends a response with an error message if validation fails or user already exists.
  */
-export const signup = async (req: Request, res: Response) => {
+export const signup = async (req: Request, res: Response): Promise<any> => {
+    // NOTE: f(): Promise<any> explicitly defines the function will return some kind of Promise, but keeps it unspecific
     res.send("Signup route")
 
     // Get the provided data from the signup form request
