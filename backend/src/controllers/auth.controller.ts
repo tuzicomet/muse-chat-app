@@ -54,8 +54,14 @@ export const signup = async (req: Request, res: Response) => {
             res.status(400).json({ message: "Invalid user data" })
         }
 
-    } catch (error) {
-
+    } catch (error: unknown) { // catch block defaults to unknown for the error type in TypeScript
+        // Type guard to check if the error is an instance of Error
+        if (error instanceof Error) {
+            console.log("Error in signup controller", error.message);
+        } else {
+            console.log("Unexpected error in signup controller", error);
+        }
+        res.status(500).json({ message: "Internal Server Error" });
     }
 }
 
