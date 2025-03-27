@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { generateToken } from "../lib/utils.js";
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 
@@ -48,8 +49,20 @@ export const signup = async (req: Request, res: Response) => {
 
         // Check if the new user instance was successfully created
         if (newUser) {
-            // now generate jwt token
-            // and save 
+            // Generates a JWT token for the given userId, and set it as a cookie in the user's browser.
+            generateToken(newUser._id, res);
+
+            // save the new user to the database
+            await newUser.save();
+
+            res.status(201).json({
+                _id: newUser._id,
+                name: newUser.name,
+                email: newUser.email,
+                profilePic: newUser.profilePic,
+                aboutMe: newUser.aboutMe || "", // aboutMe should be empty for new users
+            });
+
         } else { // If there was a problem with creating the new user instance
             res.status(400).json({ message: "Invalid user data" })
         }
