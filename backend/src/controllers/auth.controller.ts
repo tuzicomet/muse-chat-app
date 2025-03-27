@@ -22,9 +22,13 @@ export const signup = async (req: Request, res: Response): Promise<any> => {
     const { name, email, password } = req.body;
 
     try {
+        // Check that all required fields are provided in the request
+        if (!name || !email || !password) {
+            return res.status(400).json({ message: "All fields are required" });
+        }
+
         // Check that the provided password is valid
         if (password.length < 6) {
-            // if password is not valid, send an error message with status 400 (Bad Request)
             return res.status(400).json({ message: "Password must be at least 6 characters long" });
         }
 
