@@ -1,16 +1,17 @@
 import { Request, Response } from "express";
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
+import mongoose from "mongoose";
 
 /**
  * Generates a JWT token for the given userId, and sets it as a cookie in their browser.
  * This token and cookie will be used for authenticating user requests.
  * 
- * @param userId - The unique identifier for the user.
+ * @param userId - The unique ObjectId of the user from the database.
  * @param res - The response object to send the cookie.
  * @returns the generated JWT token.
  */
-export const generateToken = (userId: string, res: Response) => {
+export const generateToken = (userId: mongoose.Types.ObjectId, res: Response) => {
 
     // Check that JWT_SECRET_KEY is defined in .env before attempting to generate a token
     if (!process.env.JWT_SECRET_KEY) {
