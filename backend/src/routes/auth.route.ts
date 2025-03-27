@@ -5,13 +5,13 @@ import { signup, login, logout } from "../controllers/auth.controller.js"
 const router = express.Router();
 
 // Signup page route
-router.get("/signup", signup);
+router.post("/signup", signup);
 
 // Login page route
-router.get("/login", login);
+router.post("/login", login);
 
 // Logout route
-router.get("/logout", logout);
+router.post("/logout", logout);
 
 // Export router to be usable in other files
 export default router;
