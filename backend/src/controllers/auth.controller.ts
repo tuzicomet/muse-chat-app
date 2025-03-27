@@ -14,7 +14,9 @@ import bcrypt from "bcryptjs";
  */
 export const signup = async (req: Request, res: Response): Promise<any> => {
     // NOTE: f(): Promise<any> explicitly defines the function will return some kind of Promise, but keeps it unspecific
-    res.send("Signup route")
+
+    // NOTE: this doesnt just print in terminal, it sends a response to client and ends the req-res cycle (aka it wont continue past this)
+    // res.send("Signup route")
 
     // Get the provided data from the signup form request
     const { name, email, password } = req.body;
