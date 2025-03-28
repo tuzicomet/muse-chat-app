@@ -59,9 +59,10 @@ export const signup = async (req: Request, res: Response): Promise<any> => {
             // Generates a JWT token for the given userId, and set it as a cookie in the user's browser.
             generateToken(newUser._id, res);
 
-            // save the new user to the database
+            // Save the new user to the database
             await newUser.save();
 
+            // Send the user data back to the client in json, with 201 Created status
             res.status(201).json({
                 _id: newUser._id,
                 name: newUser.name,
@@ -106,6 +107,18 @@ export const login = async (req: Request, res: Response): Promise<any> => {
             // so that attackers cannot tell which one failed
             return res.status(400).json({ message: "Invalid credentials" });
         }
+
+        // If validation passed, generate an auth token for the user and set it as a cookie
+        generateToken(user._id, res);
+
+        // Send the user data back to the client in json, with 200 OK status
+        res.status(200).json({
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            profilePic: user.profilePic,
+            aboutMe: user.aboutMe,
+        });
 
     } catch (error: unknown) {
         // Type guard to check if the error is an instance of Error
