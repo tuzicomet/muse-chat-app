@@ -52,7 +52,7 @@ export const signup = async (req: Request, res: Response): Promise<any> => {
             email: email,
             password: hashedPassword, // use the hashedPassword instead of the provided password
             // remaining fields will be generated automatically
-        })
+        });
 
         // Check if the new user instance was successfully created
         if (newUser) {
@@ -71,7 +71,7 @@ export const signup = async (req: Request, res: Response): Promise<any> => {
             });
 
         } else { // If there was a problem with creating the new user instance
-            res.status(400).json({ message: "Invalid user data" })
+            res.status(400).json({ message: "Invalid user data" });
         }
 
     } catch (error: unknown) { // catch block defaults to unknown for the error type in TypeScript
@@ -92,5 +92,5 @@ export const login = (req: Request, res: Response) => {
 
 // Handle user logout requests
 export const logout = (req: Request, res: Response) => {
-    res.send("logout route")
+    res.send("logout route");
 }
