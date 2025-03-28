@@ -86,8 +86,36 @@ export const signup = async (req: Request, res: Response): Promise<any> => {
 }
 
 // Handle user login requests
-export const login = (req: Request, res: Response) => {
-    res.send("login route")
+export const login = async (req: Request, res: Response): Promise<any> => {
+    // Get the provided data from the signup form request
+    const { name, email, password } = req.body;
+
+    try {
+        // Check if there exists a user in the database with the provided email
+        const user = await User.findOne({email});
+        // If no user exists with the provided email, send an error message
+        if (!user) {
+            return res.status(400).json({ message: "Invalid credentials" });
+        }
+
+        // Check if the provided password corresponds with the user's hashed password in the db
+        const isPasswordCorrect = await bcrypt.compare(password, user.password);
+        // If the password verification fails, send an error message
+        if (!isPasswordCorrect) {
+            // NOTE: want the email and password checks to have the same error message
+            // so that attackers cannot tell which one failed
+            return res.status(400).json({ message: "Invalid credentials" });
+        }
+
+    } catch (error: unknown) {
+        // Type guard to check if the error is an instance of Error
+        if (error instanceof Error) {
+            console.log("Error in login controller", error.message);
+        } else {
+            console.log("Unexpected error in login controller", error);
+        }
+        res.status(500).json({ message: "Internal Server Error" });
+    }
 }
 
 // Handle user logout requests
