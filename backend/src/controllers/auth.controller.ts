@@ -132,12 +132,14 @@ export const login = async (req: Request, res: Response): Promise<any> => {
 }
 
 // Handle user logout requests
-export const logout = (req: Request, res: Response) => {
+export const logout = async (req: Request, res: Response): Promise<any> => {
     try {
         // To log out the user, all we need to do is clear their jwt authentication cookie
 
         // Update the jwt cookie to empty string value, with maxAge: 0 so it expires immediately
-        res.cookie("jwt", "", { maxAge:0 })
+        res.cookie("jwt", "", { maxAge:0 });
+
+        res.status(200).json({ message: "Logged out successfully" });
 
     } catch (error: unknown) {
         // Type guard to check if the error is an instance of Error
