@@ -133,5 +133,19 @@ export const login = async (req: Request, res: Response): Promise<any> => {
 
 // Handle user logout requests
 export const logout = (req: Request, res: Response) => {
-    res.send("logout route");
+    try {
+        // To log out the user, all we need to do is clear their jwt authentication cookie
+
+        // Update the jwt cookie to empty string value, with maxAge: 0 so it expires immediately
+        res.cookie("jwt", "", { maxAge:0 })
+
+    } catch (error: unknown) {
+        // Type guard to check if the error is an instance of Error
+        if (error instanceof Error) {
+            console.log("Error in logout controller", error.message);
+        } else {
+            console.log("Unexpected error in logout controller", error);
+        }
+        res.status(500).json({ message: "Internal Server Error" });
+    }
 }
