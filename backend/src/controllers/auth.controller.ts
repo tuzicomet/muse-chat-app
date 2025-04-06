@@ -86,7 +86,18 @@ export const signup = async (req: Request, res: Response): Promise<any> => {
     };
 };
 
-// Handle user login requests
+/**
+ * Handles user login requests.
+ * Validates the user's login request by checking if there exists a user with the 
+ * given email, and then checks if the given password matches with the existing user's
+ * hashed password.
+ * If successful, generates an authentication token for the user and sets it as a cookie,
+ * so that the user will stay logged in.
+ * @param req - The request object containing user data from the signup form.
+ * @param res - The response object used to send back a response to the client.
+ * @returns Sends the user data back to the client with 200 OK status if login was successful, 
+ *          otherwise sends a response with an error message.
+ */
 export const login = async (req: Request, res: Response): Promise<any> => {
     // Get the provided data from the signup form request
     const { name, email, password } = req.body;
@@ -131,10 +142,17 @@ export const login = async (req: Request, res: Response): Promise<any> => {
     };
 };
 
-// Handle user logout requests
+/**
+ * Handles user logout requests.
+ * Logs out the user by clearing the jwt authentication cookie
+ * @param req - The request object containing user data from the signup form.
+ * @param res - The response object used to send back a response to the client.
+ * @returns Sends a 200 OK status if successful, otherwise sends a response with an error message.
+ */
 export const logout = async (req: Request, res: Response): Promise<any> => {
     try {
         // To log out the user, all we need to do is clear their jwt authentication cookie
+        // (will also work if the user is not already logged in, but thats fine)
 
         // Update the jwt cookie to empty string value, with maxAge: 0 so it expires immediately
         res.cookie("jwt", "", { maxAge:0 });
