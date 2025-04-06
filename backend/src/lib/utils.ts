@@ -32,4 +32,4 @@ export const generateToken = (userId: mongoose.Types.ObjectId, res: Response) =>
     });
 
     return token;
-}
+};
