@@ -3,6 +3,17 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import User from "../models/user.model.js";
 
+/**
+ * Middleware function to protect routes by verifying the user's authentication before proceeding.
+ * Does this by checking the presence and validity of their JWT token.
+ * If the token is valid, it attaches the authenticated user to the request object and proceeds to the next middleware.
+ * If the token is missing or invalid, it returns an unauthorized error response.
+ * 
+ * @param {Request} req - The request object containing data from the form and the JWT token in the cookies.
+ * @param {Response} res - The response object used to send back a response to the client.
+ * @param {NextFunction} next - The function to proceed to the next middleware or route handler if authentication is successful.
+ * @returns {void} - Sends a response to the client, either proceeding to the next middleware or returning an error response.
+ */
 export const protectRoute = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
     try {
         // Attempt to find a cookie named "jwt" from the request
