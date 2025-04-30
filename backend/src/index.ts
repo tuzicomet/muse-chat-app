@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 // NOTE: although the actual file is .ts, it'll compile to .js, which we must use
 import { connectDB } from "./lib/db.js"
 import authRoutes from "./routes/auth.route.js";
+import cookieParser from "cookie-parser";
 
 // Load environment variables from the .env file
 dotenv.config();
@@ -14,6 +15,8 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware to parse incoming JSON requests, and makes the data available in req.body
 app.use(express.json());
+// Middleware to parse cookies, so that we can extract their values
+app.use(cookieParser());
 
 // Any request to /api/auth/... will be handled by authRoutes
 app.use("/api/auth", authRoutes);
