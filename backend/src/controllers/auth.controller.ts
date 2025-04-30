@@ -169,3 +169,17 @@ export const logout = async (req: Request, res: Response): Promise<any> => {
         res.status(500).json({ message: "Internal Server Error" });
     };
 };
+
+export const updateProfile = async (req: Request, res: Response): Promise<any> => {
+    try {
+        // User must be able to update their name, password, profile picture, about description
+    } catch (error: unknown) {
+        // Type guard to check if the error is an instance of Error
+        if (error instanceof Error) {
+            console.log("Error in updateProfile controller", error.message);
+        } else {
+            console.log("Unexpected error in updateProfile controller", error);
+        }
+        res.status(500).json({ message: "Internal Server Error" });
+    };
+};
