@@ -8,7 +8,7 @@ import bcrypt from "bcryptjs";
  * Validates the provided user data, checks if the email is already taken, 
  * hashes the password, and creates a new user in the database.
  * 
- * @param req - The request object containing user data from the signup form.
+ * @param req - The request object containing data from the form.
  * @param res - The response object used to send back a response to the client.
  * @returns Sends a response with an error message if validation fails or user already exists.
  */
@@ -93,7 +93,7 @@ export const signup = async (req: Request, res: Response): Promise<any> => {
  * hashed password.
  * If successful, generates an authentication token for the user and sets it as a cookie,
  * so that the user will stay logged in.
- * @param req - The request object containing user data from the signup form.
+ * @param req - The request object containing data from the form.
  * @param res - The response object used to send back a response to the client.
  * @returns Sends the user data back to the client with 200 OK status if login was successful, 
  *          otherwise sends a response with an error message.
@@ -145,7 +145,7 @@ export const login = async (req: Request, res: Response): Promise<any> => {
 /**
  * Handles user logout requests.
  * Logs out the user by clearing the jwt authentication cookie
- * @param req - The request object containing user data from the signup form.
+ * @param req - The request object containing data from the form.
  * @param res - The response object used to send back a response to the client.
  * @returns Sends a 200 OK status if successful, otherwise sends a response with an error message.
  */
