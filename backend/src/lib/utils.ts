@@ -7,9 +7,9 @@ import mongoose from "mongoose";
  * Generates a JWT token for the given userId, and sets it as a cookie in their browser.
  * This token and cookie will be used for authenticating user requests.
  * 
- * @param userId - The unique ObjectId of the user from the database.
- * @param res - The response object to send the cookie.
- * @returns the generated JWT token.
+ * @param {mongoose.Types.ObjectId} userId - The unique ObjectId of the user from the database.
+ * @param {Response} res - The response object to send the cookie.
+ * @returns {string} - The generated JWT token.
  */
 export const generateToken = (userId: mongoose.Types.ObjectId, res: Response) => {
 

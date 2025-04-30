@@ -6,7 +6,8 @@ import mongoose from "mongoose"; // Package for interacting with our MongoDB dat
  * If the connection is successful, it logs the database host.
  * If an error occurs during the connection, it logs the error message.
  *
- * @throws Will throw an error if MONGODB_URI is not set in the environment variables.
+ * @throws {Error} Will throw an error if MONGODB_URI is not set in the environment variables.
+ * @returns {void} This function does not return anything.
  */
 export const connectDB = async () => {
     try {
