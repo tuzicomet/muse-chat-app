@@ -33,8 +33,11 @@ export const protectRoute = async (req: Request, res: Response, next: NextFuncti
         }
 
         // If all checks are passed, that means the user is authenticated
+        // Attach the authenticated user object to the request so we can access them in the next function
+        req.user = user;
 
-        // Need to be able to give back the validation result and call the next function
+        // Proceed to the next function
+        next()
 
     } catch (error: unknown) {
         // Type guard to check if the error is an instance of Error
