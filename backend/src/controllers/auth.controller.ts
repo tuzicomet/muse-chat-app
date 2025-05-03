@@ -10,7 +10,7 @@ import bcrypt from "bcryptjs";
  * 
  * @param {Request} req - The request object containing data from the form.
  * @param {Response} res - The response object used to send back a response to the client.
- * @returns {void} - Sends a 200 OK status if successful, otherwise sends a response with an error message.
+ * @returns {void} - Sends a 201 Created status if successful, otherwise sends a response with an error message.
  */
 export const signup = async (req: Request, res: Response): Promise<any> => {
     // NOTE: f(): Promise<any> explicitly defines the function will return some kind of Promise, but keeps it unspecific
