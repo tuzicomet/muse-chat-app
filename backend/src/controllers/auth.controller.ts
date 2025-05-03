@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { generateToken } from "../lib/utils.js";
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
+import cloudinary from "../lib/cloudinary.js";
 
 /**
  * Handles user signup.
@@ -174,6 +175,33 @@ export const logout = async (req: Request, res: Response): Promise<any> => {
 export const updateProfile = async (req: Request, res: Response): Promise<any> => {
     try {
         // User must be able to update their name, password, profile picture, about description
+
+        // TODO: current functionality is only for updating profile picture, need to either extend
+        // this to also be able to update other fields at once, or make other functions for those
+
+        // Get the uploaded profile picture from the request body
+        const { profilePic } = req.body;
+
+        // the current user should be available from protectRoute middleware as req.user
+        const userId = req.user._id;
+
+        if (!profilePic) {
+            return res.status(400).json({ message: "Profile pic is required" });
+        }
+
+        // Using cloudinary as a bucket for storing images
+        // Upload the new profile pic to the cloudinary bucket and get the api response
+        const uploadResponse = await cloudinary.uploader.upload(profilePic);
+
+        // Update the user's profilePic value with the url to the uploaded image
+        // use {new:true} so that the user returned is from after the update is applied
+        const updatedUser = await User.findByIdAndUpdate(userId, 
+                                                         {profilePic:uploadResponse.secure_url}, 
+                                                         {new:true});
+
+        // If successful, send a 200 OK status with the updated user in json
+        res.status(200).json(updatedUser);
+
     } catch (error: unknown) {
         // Type guard to check if the error is an instance of Error
         if (error instanceof Error) {
