@@ -6,6 +6,9 @@ import mongoose from "mongoose";
  */
 const userSchema = new mongoose.Schema(
     {
+        _id: {
+            type: mongoose.Types.ObjectId,
+        },
         email: {
             type: String,
             required: true,
