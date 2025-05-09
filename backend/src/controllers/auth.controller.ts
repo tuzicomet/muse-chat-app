@@ -212,3 +212,35 @@ export const updateProfile = async (req: Request, res: Response): Promise<any> =
         res.status(500).json({ message: "Internal Server Error" });
     };
 };
+
+/**
+ * Controller function to check if the user is currently authenticated.
+ * 
+ * This should be used primarily on frontend app load or refresh to verify the user's session.
+ * 
+ * This function should be used together with the `protectRoute` middleware.
+ * `protectRoute` performs the actual authentication by verifying the JWT and attaching
+ * the authenticated user to `req.user`. If the request reaches this function, it means
+ * authentication has already succeeded.
+ * 
+ * `checkAuth` itself does not handle authentication — it simply responds with the
+ * authenticated user's data, confirming that the session is still valid.
+ * 
+ * @param {Request} req - The request object, which should have the authenticated user attached by the protectRoute middleware.
+ * @param {Response} res - The response object used to return user data or an error.
+ * @returns {Promise<void>} - Sends a JSON response with user data if authenticated, or an error response if not.
+ */
+export const checkAuth = async (req: Request, res: Response): Promise<any> => {
+    try {
+        // If this runs, protectRoute already verified the token and attached the user to req.user
+        res.status(200).json(req.user);
+    } catch (error: unknown) {
+        // Type guard to check if the error is an instance of Error
+        if (error instanceof Error) {
+            console.log("Error in checkAuth controller", error.message);
+        } else {
+            console.log("Unexpected error in checkAuth controller", error);
+        }
+        res.status(500).json({ message: "Internal Server Error" });
+    };
+};
