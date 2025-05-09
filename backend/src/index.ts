@@ -1,7 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 // NOTE: although the actual file is .ts, it'll compile to .js, which we must use
-import { connectDB } from "./lib/db.js"
+import { connectDB } from "./lib/db.js";
 import authRoutes from "./routes/auth.route.js";
 import cookieParser from "cookie-parser";
 

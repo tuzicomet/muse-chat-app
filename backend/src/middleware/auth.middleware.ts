@@ -59,4 +59,4 @@ export const protectRoute = async (req: Request, res: Response, next: NextFuncti
         }
         res.status(500).json({ message: "Internal Server Error" });
     };
-}
+};
