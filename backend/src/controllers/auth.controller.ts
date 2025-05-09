@@ -59,7 +59,7 @@ export const signup = async (req: Request, res: Response): Promise<any> => {
         // Check if the new user instance was successfully created
         if (newUser) {
             // Generates a JWT token for the given userId, and set it as a cookie in the user's browser.
-            generateToken(newUser._id as mongoose.Types.ObjectId, res);
+            generateToken(newUser._id, res);
 
             // Save the new user to the database
             await newUser.save();
@@ -122,7 +122,7 @@ export const login = async (req: Request, res: Response): Promise<any> => {
         };
 
         // If validation passed, generate an auth token for the user and set it as a cookie
-        generateToken(user._id as mongoose.Types.ObjectId, res);
+        generateToken(user._id, res);
 
         // Send the user data back to the client in json, with 200 OK status
         res.status(200).json({
