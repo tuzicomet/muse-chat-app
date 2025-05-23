@@ -1,9 +1,10 @@
 import express from "express";
 import dotenv from "dotenv";
-// NOTE: although the actual file is .ts, it'll compile to .js, which we must use
+import cookieParser from "cookie-parser";
+
+// NOTE: when importing .ts files, they'll compile to .js, so we must use the .js extension
 import { connectDB } from "./lib/db.js";
 import authRoutes from "./routes/auth.route.js";
-import cookieParser from "cookie-parser";
 
 // Load environment variables from the .env file
 dotenv.config();
