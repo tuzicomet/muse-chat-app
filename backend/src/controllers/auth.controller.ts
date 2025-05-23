@@ -173,6 +173,22 @@ export const logout = async (req: Request, res: Response): Promise<any> => {
     };
 };
 
+/**
+ * Controller function to update the user's profile.
+ * 
+ * Currently, this function only allows the user to update their profile picture.
+ * 
+ * The user must be authenticated using the `protectRoute` middleware, which attaches
+ * the user's details to `req.user`. This function then retrieves the uploaded image,
+ * stores it using Cloudinary, and updates the user's `profilePic` URL in the database.
+ * 
+ * In future updates, this function may be expanded to allow changes to other profile
+ * fields such as name, password, and description.
+ * 
+ * @param {Request} req - The request object containing the uploaded profile image and authenticated user info.
+ * @param {Response} res - The response object used to return the updated user or an error.
+ * @returns {Promise<void>} - Sends a JSON response with the updated user if successful, or an error message.
+ */
 export const updateProfile = async (req: Request, res: Response): Promise<any> => {
     try {
         // User must be able to update their name, password, profile picture, about description
