@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 import { connectDB } from "./lib/db.js";
 import authRoutes from "./routes/auth.route.js";
 import chatRoutes from "./routes/chat.route.js";
+import messageRoutes from "./routes/message.route.js";
 
 // Load environment variables from the .env file
 dotenv.config();
@@ -23,6 +24,7 @@ app.use(cookieParser());
 // Any request to /api/auth/... will be handled by authRoutes
 app.use("/api/auth", authRoutes);
 app.use("/api/chat", chatRoutes);
+app.use("/api/message", messageRoutes)
 
 // Start the server and listen on the specified port
 app.listen(PORT, () => {
