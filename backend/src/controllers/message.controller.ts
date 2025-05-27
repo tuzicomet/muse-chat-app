@@ -31,3 +31,37 @@ export const getChatMessages = async (req: Request, res: Response): Promise<void
         res.status(500).json({ message: "Internal Server Error" });
     }
 };
+
+/**
+ * Sends a new message in a specific chat.
+ */
+export const sendChatMessage = async (req: Request, res: Response): Promise<void> => {
+    try {
+        // TODO
+
+        // Extract the message content and/or image from the request body
+        const { text, image } = req.body;
+        // Extract the chat ID from the URL params
+        const { chatId } = req.params;
+        // Get the sender's user ID (i.e. the currently logged-in user)
+        const senderId = req.user._id;
+
+        // If an image is provided, upload it to Cloudinary
+
+        // Create a new message instance with the provided data
+
+        // Save the message to the database
+
+        // Need to show the message to everyone in real time
+        
+        res.status(201)
+
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            console.log("Error in sendChatMessage controller:", error.message);
+        } else {
+            console.log("Unexpected error in sendChatMessage controller:", error);
+        }
+        res.status(500).json({ error: "Internal server error" });
+    }
+};
