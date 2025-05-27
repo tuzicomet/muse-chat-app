@@ -23,6 +23,25 @@ export const createChat = async (req: Request, res: Response): Promise<any> => {
         // Add current user to the members array if not already included
         const allMembers = Array.from(new Set([...memberIds, userId]));
 
+        // Validate members and name depending on chat type
+        if (isGroup) {
+            if (!name || name.trim().length === 0) {
+                return res.status(400).json({ message: "Group chats must have a name." });
+            }
+            if (allMembers.length < 3) {
+                // 3 = at least two others + logged in user
+                return res.status(400).json({ message: "Group chats must have at least 3 members." });
+            }
+        } else {
+            // Direct message must have exactly 2 members, and cannot have a name
+            if (allMembers.length !== 2) {
+                return res.status(400).json({ message: "Direct messages must have exactly 2 members." });
+            }
+            if (name && name.trim().length > 0) {
+                return res.status(400).json({ message: "Direct messages cannot have a name." });
+            }
+        }
+
         // Create a new chat document with the given information
         const newChat = new Chat({
             name: isGroup ? name : "", // Optional for DM
