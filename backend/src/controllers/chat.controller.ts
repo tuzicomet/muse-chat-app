@@ -3,6 +3,51 @@ import Chat from "../models/chat.model.js";
 import Message from "../models/message.model.js";
 
 /**
+ * Creates a new chat with the specified members.
+ * Can be created as either a group chat, or direct messages between two users.
+ *
+ * @param {Request} req - The request object, containing the authenticated user and body with chat details.
+ * @param {Response} res - The response object used to send data back to the client.
+ * @returns {void} - Sends the newly created chat with status 201 if successful, otherwise an error message.
+ */
+export const createChat = async (req: Request, res: Response): Promise<any> => {
+    try {
+        // Get chat details from the request body:
+        // - memberIds: array of user IDs to include in the chat
+        // - isGroup: boolean indicating if this is a group chat
+        // - name: optional name for the chat (used only for group chats)
+        const { memberIds, isGroup, name } = req.body;
+        // Also get the id of the currently logged in user
+        const userId = req.user._id;
+
+        // Create a new chat document with the given information
+        const newChat = new Chat({
+            name: isGroup ? name : "", // Optional for DM
+            isGroup,
+            memberIds,
+        });
+
+        // Save the chat to the database
+        await newChat.save();
+
+        // Replace the member IDs with full user details (excluding passwords)
+        const populatedChat = await newChat.populate("members", "-password");
+
+        // send the populated chat back to the client in json with 201 Created status
+        res.status(201).json(populatedChat);
+
+    } catch (error: unknown) {
+        // Type guard to check if the error is an instance of Error
+        if (error instanceof Error) {
+            console.log("Error in createChat controller:", error.message);
+        } else {
+            console.log("Unexpected error in createChat controller:", error);
+        }
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+};
+
+/**
  * Retrieves a list of all chats the logged-in user is a member of.
  *
  * This function is used to populate the chat sidebar so that the logged-in user
