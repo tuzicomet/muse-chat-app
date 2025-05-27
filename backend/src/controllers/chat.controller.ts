@@ -20,11 +20,14 @@ export const createChat = async (req: Request, res: Response): Promise<any> => {
         // Also get the id of the currently logged in user
         const userId = req.user._id;
 
+        // Add current user to the members array if not already included
+        const allMembers = Array.from(new Set([...memberIds, userId]));
+
         // Create a new chat document with the given information
         const newChat = new Chat({
             name: isGroup ? name : "", // Optional for DM
             isGroup,
-            memberIds,
+            members: allMembers,
         });
 
         // Save the chat to the database
