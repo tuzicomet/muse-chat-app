@@ -7,4 +7,7 @@ const router = express.Router();
 // Get all messages in the chat with the specified ID.
 router.get("/chat/:chatId", protectRoute, getChatMessages);
 
+// Send a message in the chat with the specified ID.
+router.post("/chat/:chatId", protectRoute, sendChatMessage);
+
 export default router;
