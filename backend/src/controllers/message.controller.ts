@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import Message from "../models/message.model.js";
+import cloudinary from "../lib/cloudinary.js";
 
 /**
  * Retrieves all messages belonging to a specific chat.
@@ -34,11 +35,16 @@ export const getChatMessages = async (req: Request, res: Response): Promise<any>
 
 /**
  * Sends a new message in a specific chat.
+ *
+ * This function creates a new message in a specific chat, with text and/or an image, and 
+ * saves the message to the database
+ *
+ * @param {Request} req - The request object, containing the message content and chatId.
+ * @param {Response} res - The response object used to send back the new message.
+ * @returns {void}
  */
 export const sendChatMessage = async (req: Request, res: Response): Promise<any> => {
     try {
-        // TODO
-
         // Extract the message content and/or image from the request body
         const { text, image } = req.body;
         // Extract the chat ID from the URL params
@@ -46,14 +52,33 @@ export const sendChatMessage = async (req: Request, res: Response): Promise<any>
         // Get the sender's user ID (i.e. the currently logged-in user)
         const senderId = req.user._id;
 
-        // If an image is provided, upload it to Cloudinary
+        // Check that the message contains text and/or an image
+        if (!text && !image) {
+            return res.status(400).json({ message: "Message must include text or image." });
+        }
+
+        let imageUrl;
+        // If an image is provided, upload it to Cloudinary, and get back the response
+        if (image) {
+            const uploadResponse = await cloudinary.uploader.upload(image);
+            // get the url to the image from the response
+            imageUrl = uploadResponse.secure_url;
+        }
 
         // Create a new message instance with the provided data
+        const newMessage = new Message({
+            senderId,
+            chatId,
+            text,
+            image: imageUrl, // will be undefined if no image provided
+        });
 
         // Save the message to the database
+        await newMessage.save();
 
-        // Need to show the message to everyone in real time
-        
+        // TODO: Need to show the message to everyone in real time
+
+        // Send the message back to the client with status 201 Created
         return res.status(201).json(newMessage);
 
     } catch (error: unknown) {
