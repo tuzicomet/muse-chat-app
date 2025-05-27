@@ -12,7 +12,7 @@ import Message from "../models/message.model.js";
  * @param {Response} res - The response object used to send data back to the client.
  * @returns {void} - Sends a list of chats with status 200 if successful, otherwise an error message.
  */
-export const getChatsList = async (req: Request, res: Response): Promise<void> => {
+export const getChatsList = async (req: Request, res: Response): Promise<any> => {
     try {
         // Get the logged-in user's ID from the authenticated request
         const userId = req.user._id;
@@ -23,7 +23,7 @@ export const getChatsList = async (req: Request, res: Response): Promise<void> =
             .sort({ updatedAt: -1 }); // sort chats by last updated first
 
         // Send the list of chats back to the client in json, with 200 OK status
-        res.status(200).json(chats);
+        return res.status(200).json(chats);
 
     } catch (error: unknown) {
         // Type guard to check if the error is an instance of Error
@@ -32,6 +32,6 @@ export const getChatsList = async (req: Request, res: Response): Promise<void> =
         } else {
             console.log("Unexpected error in getChatsList controller:", error);
         }
-        res.status(500).json({ message: "Internal Server Error" });
+        return res.status(500).json({ message: "Internal Server Error" });
     }
 };

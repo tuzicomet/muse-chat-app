@@ -10,7 +10,7 @@ import Message from "../models/message.model.js";
  * @param {Response} res - The response object used to send back the list of messages.
  * @returns {void} - Sends a list of messages with status 200 if successful, otherwise an error message.
  */
-export const getChatMessages = async (req: Request, res: Response): Promise<void> => {
+export const getChatMessages = async (req: Request, res: Response): Promise<any> => {
     try {
         // Extract the chat ID from the URL params
         const { chatId } = req.params;
@@ -19,7 +19,7 @@ export const getChatMessages = async (req: Request, res: Response): Promise<void
         const messages = await Message.find({ chatId });
 
         // Send the list of messages back to the client in JSON, with 200 OK status
-        res.status(200).json(messages);
+        return res.status(200).json(messages);
 
     } catch (error: unknown) {
         // Type guard to check if the error is an instance of Error
@@ -28,14 +28,14 @@ export const getChatMessages = async (req: Request, res: Response): Promise<void
         } else {
             console.log("Unexpected error in getChatMessages controller", error);
         }
-        res.status(500).json({ message: "Internal Server Error" });
+        return res.status(500).json({ message: "Internal Server Error" });
     }
 };
 
 /**
  * Sends a new message in a specific chat.
  */
-export const sendChatMessage = async (req: Request, res: Response): Promise<void> => {
+export const sendChatMessage = async (req: Request, res: Response): Promise<any> => {
     try {
         // TODO
 
@@ -54,7 +54,7 @@ export const sendChatMessage = async (req: Request, res: Response): Promise<void
 
         // Need to show the message to everyone in real time
         
-        res.status(201)
+        return res.status(201).json(newMessage);
 
     } catch (error: unknown) {
         if (error instanceof Error) {
@@ -62,6 +62,6 @@ export const sendChatMessage = async (req: Request, res: Response): Promise<void
         } else {
             console.log("Unexpected error in sendChatMessage controller:", error);
         }
-        res.status(500).json({ error: "Internal server error" });
+        return res.status(500).json({ error: "Internal server error" });
     }
 };
