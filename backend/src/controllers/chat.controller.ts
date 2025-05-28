@@ -70,6 +70,46 @@ export const createChat = async (req: Request, res: Response): Promise<any> => {
 };
 
 /**
+ * Retrieves details of a specific chat by ID.
+ *
+ * @param {Request} req - The request object containing the authenticated user and chat ID in params.
+ * @param {Response} res - The response object used to send chat data back to the client.
+ * @returns {void} - Sends the chat if found and user is authorised, otherwise an error message.
+ */
+export const getChat = async (req: Request, res: Response): Promise<any> => {
+    try {
+        // Get the id of the chat to retrieve, as well as the id of the current user
+        const chatId = req.params.chatId;
+        const userId = req.user._id;
+
+        // Retrieve the chat by id, and replace member IDs with full user details (excl. passwords)
+        const chat = await Chat.findById(chatId).populate("members", "-password");
+
+        // Check that a chat was found
+        if (!chat) {
+            return res.status(404).json({ message: "Chat not found." });
+        }
+
+        // Ensure the user is a member of the chat, otherwise they are not allowed to view it
+        if (!chat.members.some((member: any) => member._id.toString() === userId.toString())) {
+            return res.status(403).json({ message: "You are not authorised to view this chat." });
+        }
+
+        // Send the chat back to the client in json with 200 OK status
+        res.status(200).json(chat);
+
+    } catch (error: unknown) {
+        // Type guard to check if the error is an instance of Error
+        if (error instanceof Error) {
+            console.log("Error in getChat controller:", error.message);
+        } else {
+            console.log("Unexpected error in getChat controller:", error);
+        }
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+};
+
+/**
  * Retrieves a list of all chats the logged-in user is a member of.
  *
  * This function is used to populate the chat sidebar so that the logged-in user
