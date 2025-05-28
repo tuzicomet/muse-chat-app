@@ -40,7 +40,7 @@ export const createChat = async (req: Request, res: Response): Promise<any> => {
             if (name && name.trim().length > 0) {
                 return res.status(400).json({ message: "Direct messages cannot have a name." });
             }
-        }
+        };
 
         // Create a new chat document with the given information
         const newChat = new Chat({
@@ -55,7 +55,7 @@ export const createChat = async (req: Request, res: Response): Promise<any> => {
         // Replace the member IDs with full user details (excluding passwords)
         const populatedChat = await newChat.populate("members", "-password");
 
-        // send the populated chat back to the client in json with 201 Created status
+        // Send the chat back to the client in json with 201 Created status
         res.status(201).json(populatedChat);
 
     } catch (error: unknown) {
