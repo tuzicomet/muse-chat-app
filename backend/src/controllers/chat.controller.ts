@@ -4,7 +4,7 @@ import Message from "../models/message.model.js";
 
 /**
  * Creates a new chat with the specified members.
- * Can be created as either a group chat, or direct messages between two users.
+ * Can be created as either a group chat, or a direct message (DM) chat between two users.
  *
  * @param {Request} req - The request object, containing the authenticated user and body with chat details.
  * @param {Response} res - The response object used to send data back to the client.
@@ -14,7 +14,7 @@ export const createChat = async (req: Request, res: Response): Promise<any> => {
     try {
         // Get chat details from the request body:
         // - memberIds: array of user IDs to include in the chat
-        // - isGroup: boolean indicating if this is a group chat
+        // - isGroup: boolean indicating if this is a group chat (true) or a DM (false)
         // - name: optional name for the chat (used only for group chats)
         const { memberIds, isGroup, name } = req.body;
         // Also get the id of the currently logged in user
@@ -44,7 +44,7 @@ export const createChat = async (req: Request, res: Response): Promise<any> => {
 
         // Create a new chat document with the given information
         const newChat = new Chat({
-            name: isGroup ? name : "", // Optional for DM
+            name: isGroup ? name : "", // If group chat, use the provided name, otherwise set to ""
             isGroup,
             members: allMembers,
         });
