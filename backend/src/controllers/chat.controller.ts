@@ -142,3 +142,53 @@ export const getChatsList = async (req: Request, res: Response): Promise<any> =>
         return res.status(500).json({ message: "Internal Server Error" });
     }
 };
+
+/**
+ * Allows a user to leave a group chat they are a member of.
+ * Only works for group chats as Direct messages (DMs) cannot be left.
+ *
+ * @param {Request} req - The request object containing the user and chat ID.
+ * @param {Response} res - The response object used to send back status.
+ * @returns {void} - Sends status 200 with a message if successful, otherwise an error message.
+ */
+export const leaveGroupChat = async (req: Request, res: Response): Promise<any> => {
+    try {
+        const userId = req.user._id;
+        const { chatId } = req.params;
+
+        // First, find the chat
+        const chat = await Chat.findById(chatId);
+
+        if (!chat) {
+            return res.status(404).json({ message: "Chat not found." });
+        }
+
+        if (!chat.isGroup) {
+            return res.status(400).json({ message: "Cannot leave a direct message chat." });
+        }
+
+        // Make sure the user is in the chat before removing them
+        if (!chat.members.includes(userId)) {
+            return res.status(403).json({ message: "You are not a member of this chat." });
+        }
+
+        // Remove the user from the members array
+        chat.members = chat.members.filter(
+            // Go through each member ID and remove any members with the matching user ID
+            // To compare them, we also need to convert both from mongoose ObjectIds to strings
+            // (even though they refer to the same user, they are separate objects and would be counted as such)
+            (memberId) => memberId.toString() !== userId.toString()
+        );
+        await chat.save();
+
+        res.status(200).json({ message: "Successfully left the group chat." });
+
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            console.log("Error in leaveGroupChat controller:", error.message);
+        } else {
+            console.log("Unexpected error in leaveGroupChat controller:", error);
+        }
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+};
