@@ -40,7 +40,7 @@ export const createChat = async (req: Request, res: Response): Promise<any> => {
             if (name && name.trim().length > 0) {
                 return res.status(400).json({ message: "Direct messages cannot have a name." });
             }
-        };
+        }
 
         // Create a new chat document with the given information
         const newChat = new Chat({
