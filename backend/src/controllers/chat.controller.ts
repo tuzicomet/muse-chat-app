@@ -145,8 +145,9 @@ export const getChatsList = async (req: Request, res: Response): Promise<any> =>
 
 /**
  * Adds new members to a group chat.
+ * The authenticated user must be a member of the group chat to add new members.
  *
- * @param {Request} req - The request object containing the chatId param, and memberIds in body.
+ * @param {Request} req - The request object containing the authenticated user, chatId param, and memberIds in body.
  * @param {Response} res - The response object used to send updated chat back to client.
  * @returns {void}
  */
@@ -154,6 +155,7 @@ export const addMembersToGroupChat = async (req: Request, res: Response): Promis
     try {
         const { chatId } = req.params; // ID of the chat to add to
         const { memberIds } = req.body; // the IDs of the users to add as members
+        const userId = req.user._id; // ID of the currently authenticated user
 
         // Check that at least one member ID was passed in 
         if (!Array.isArray(memberIds) || memberIds.length === 0) {
@@ -168,6 +170,11 @@ export const addMembersToGroupChat = async (req: Request, res: Response): Promis
         // Check that the chat is a group chat (i.e. is not a Direct Message (DM))
         if (!chat.isGroup) {
             return res.status(400).json({ message: "You can only add members to group chats." });
+        }
+
+        // Check that currently authenticated user is a member themselves
+        if (!chat.members.includes(userId)) {
+            return res.status(403).json({ message: "You are not a member of this chat." });
         }
 
         // Add the new members to the chat's members array
