@@ -172,47 +172,58 @@ export const logout = async (req: Request, res: Response): Promise<any> => {
 };
 
 /**
- * Controller function to update the user's profile.
+ * Controller function to update the authenticated user's profile details.
  * 
- * Currently, this function only allows the user to update their profile picture.
+ * Allows updating the authenticated user's name, profilePic, and/or aboutMe fields.
+ * At least one of these fields must be provided to update.
  * 
- * The user must be authenticated using the `protectRoute` middleware, which attaches
- * the user's details to `req.user`. This function then retrieves the uploaded image,
- * stores it using Cloudinary, and updates the user's `profilePic` URL in the database.
+ * Profile pictures are updated by retrieving the uploaded image,
+ * storing it using Cloudinary, and updating the user's `profilePic` URL in the database.
  * 
- * In future updates, this function may be expanded to allow changes to other profile
- * fields such as name, password, and description.
- * 
- * @param {Request} req - The request object containing the uploaded profile image and authenticated user info.
+ * @param {Request} req - The request object containing updated fields and authenticated user info.
  * @param {Response} res - The response object used to return the updated user or an error.
  * @returns {Promise<any>} - Sends the updated user in JSON if successful, otherwise an error message.
  */
 export const updateProfile = async (req: Request, res: Response): Promise<any> => {
     try {
-        // User must be able to update their name, password, profile picture, about description
-
-        // TODO: current functionality is only for updating profile picture, need to either extend
-        // this to also be able to update other fields at once, or make other functions for those
-
-        // Get the uploaded profile picture from the request body
-        const { profilePic } = req.body;
-
+        // Get the updated fields from the request body
+        const { name, aboutMe, profilePic } = req.body;
         // the current user should be available from protectRoute middleware as req.user
         const userId = req.user._id;
 
-        if (!profilePic) {
-            return res.status(400).json({ message: "Profile pic is required" });
+        // Create an object to hold the fields to update
+        const updateData: Record<string, any> = {};
+
+        // Update name if provided and non-empty string
+        if (name && typeof name === 'string' && name.trim().length > 0) {
+            updateData.name = name.trim(); // trim to remove leading and trailing whitespace
         }
 
-        // Using cloudinary as a bucket for storing images
-        // Upload the new profile pic to the cloudinary bucket and get the api response
-        const uploadResponse = await cloudinary.uploader.upload(profilePic);
+        // Update aboutMe if provided
+        // Empty string is allowed, so that users can clear their aboutMe section.
+        if (typeof aboutMe === 'string') {
+            updateData.aboutMe = aboutMe;
+        }
 
-        // Update the user's profilePic value with the url to the uploaded image
-        // use {new:true} so that the user returned is from after the update is applied
-        const updatedUser = await User.findByIdAndUpdate(userId, 
-                                                         {profilePic:uploadResponse.secure_url}, 
-                                                         {new:true});
+        // If profilePic is provided, upload it to Cloudinary and update the URL
+        // (Using cloudinary as a bucket for storing images)
+        if (profilePic && typeof profilePic === 'string') {
+            // Upload the new profile pic to the cloudinary bucket and get the api response
+            const uploadResponse = await cloudinary.uploader.upload(profilePic);
+            updateData.profilePic = uploadResponse.secure_url;
+        }
+
+        // If no valid fields provided to update, return an error 400 (Bad Request)
+        if (Object.keys(updateData).length === 0) {
+            return res.status(400).json({ message: "No valid profile fields provided to update." });
+        }
+
+        // Update the user document with new data, and get back the updated user (excl. password)
+        const updatedUser = await User.findByIdAndUpdate(
+            userId, // ID of the user to update
+            updateData, // The object containing the fields to update
+            { new: true } // so the user returned is from after the update is applied rather than before
+        ).select("-password"); // Do not select the password for security
 
         // If successful, send a 200 OK status with the updated user in json
         res.status(200).json(updatedUser);
@@ -224,7 +235,7 @@ export const updateProfile = async (req: Request, res: Response): Promise<any> =
             console.log("Unexpected error in updateProfile controller", error);
         }
         res.status(500).json({ message: "Internal Server Error" });
-    };
+    }
 };
 
 /**
