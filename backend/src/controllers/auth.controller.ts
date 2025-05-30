@@ -12,7 +12,7 @@ import mongoose from "mongoose";
  * 
  * @param {Request} req - The request object containing data from the form.
  * @param {Response} res - The response object used to send back a response to the client.
- * @returns {void} - Sends a 201 Created status if successful, otherwise sends a response with an error message.
+ * @returns {any} - Sends a 201 Created status if successful, otherwise sends a response with an error message.
  */
 export const signup = async (req: Request, res: Response): Promise<any> => {
     // NOTE: f(): Promise<any> explicitly defines the function will return some kind of Promise, but keeps it unspecific
@@ -98,7 +98,7 @@ export const signup = async (req: Request, res: Response): Promise<any> => {
  * 
  * @param {Request} req - The request object containing data from the form.
  * @param {Response} res - The response object used to send back a response to the client.
- * @returns {void} - Sends a 200 OK status if successful, otherwise sends a response with an error message.
+ * @returns {any} - Sends a 200 OK status if successful, otherwise sends a response with an error message.
  */
 export const login = async (req: Request, res: Response): Promise<any> => {
     // Get the provided data from the signup form request
@@ -149,7 +149,7 @@ export const login = async (req: Request, res: Response): Promise<any> => {
  * 
  * @param {Request} req - The request object containing data from the form.
  * @param {Response} res - The response object used to send back a response to the client.
- * @returns {void} - Sends a 200 OK status if successful, otherwise sends a response with an error message.
+ * @returns {any} - Sends a 200 OK status if successful, otherwise sends a response with an error message.
  */
 export const logout = async (req: Request, res: Response): Promise<any> => {
     try {
@@ -185,7 +185,7 @@ export const logout = async (req: Request, res: Response): Promise<any> => {
  * 
  * @param {Request} req - The request object containing the uploaded profile image and authenticated user info.
  * @param {Response} res - The response object used to return the updated user or an error.
- * @returns {Promise<void>} - Sends a JSON response with the updated user if successful, or an error message.
+ * @returns {Promise<any>} - Sends the updated user in JSON if successful, otherwise an error message.
  */
 export const updateProfile = async (req: Request, res: Response): Promise<any> => {
     try {
@@ -242,7 +242,7 @@ export const updateProfile = async (req: Request, res: Response): Promise<any> =
  * 
  * @param {Request} req - The request object, which should have the authenticated user attached by the protectRoute middleware.
  * @param {Response} res - The response object used to return user data or an error.
- * @returns {Promise<void>} - Sends a JSON response with user data if authenticated, or an error response if not.
+ * @returns {Promise<any>} - Sends a JSON response with user data if authenticated, or an error response if not.
  */
 export const checkAuth = async (req: Request, res: Response): Promise<any> => {
     try {

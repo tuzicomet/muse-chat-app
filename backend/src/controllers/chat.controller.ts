@@ -8,7 +8,7 @@ import Message from "../models/message.model.js";
  *
  * @param {Request} req - The request object, containing the authenticated user and body with chat details.
  * @param {Response} res - The response object used to send data back to the client.
- * @returns {void} - Sends the newly created chat with status 201 if successful, otherwise an error message.
+ * @returns {any} - Sends the newly created chat with status 201 if successful, otherwise an error message.
  */
 export const createChat = async (req: Request, res: Response): Promise<any> => {
     try {
@@ -74,7 +74,7 @@ export const createChat = async (req: Request, res: Response): Promise<any> => {
  *
  * @param {Request} req - The request object containing the authenticated user and chat ID in params.
  * @param {Response} res - The response object used to send chat data back to the client.
- * @returns {void} - Sends the chat if found and user is authorised, otherwise an error message.
+ * @returns {any} - Sends the chat if found and user is authorised, otherwise an error message.
  */
 export const getChat = async (req: Request, res: Response): Promise<any> => {
     try {
@@ -116,7 +116,7 @@ export const getChat = async (req: Request, res: Response): Promise<any> => {
  *
  * @param {Request} req - The request object, containing the authenticated user info.
  * @param {Response} res - The response object used to send data back to the client.
- * @returns {void} - Sends a list of chats with status 200 if successful, otherwise an error message.
+ * @returns {any} - Sends a list of chats with status 200 if successful, otherwise an error message.
  */
 export const getChatsList = async (req: Request, res: Response): Promise<any> => {
     try {
@@ -147,7 +147,7 @@ export const getChatsList = async (req: Request, res: Response): Promise<any> =>
  *
  * @param {Request} req - The request object containing the authenticated user, chatId param, and memberIds in body.
  * @param {Response} res - The response object used to send updated chat back to client.
- * @returns {void}
+ * @returns {any}
  */
 export const addMembersToGroupChat = async (req: Request, res: Response): Promise<any> => {
     try {
@@ -201,7 +201,7 @@ export const addMembersToGroupChat = async (req: Request, res: Response): Promis
  *
  * @param {Request} req - The request object containing the user and chat ID.
  * @param {Response} res - The response object used to send back status.
- * @returns {void} - Sends status 200 with a message if successful, otherwise an error message.
+ * @returns {any} - Sends status 200 with a message if successful, otherwise an error message.
  */
 export const leaveGroupChat = async (req: Request, res: Response): Promise<any> => {
     try {
@@ -250,7 +250,7 @@ export const leaveGroupChat = async (req: Request, res: Response): Promise<any> 
  *
  * @param {Request} req - The request object with chatId param and new name in body.
  * @param {Response} res - The response object used to return updated chat or errors.
- * @returns {void}
+ * @returns {any}
  */
 export const renameGroupChat = async (req: Request, res: Response): Promise<any> => {
     try {
@@ -280,7 +280,7 @@ export const renameGroupChat = async (req: Request, res: Response): Promise<any>
         const populatedChat = await chat.populate("members", "-password");
 
         res.status(200).json(populatedChat);
-        
+
     } catch (error: unknown) {
         if (error instanceof Error) {
             console.log("Error in renameGroupChat controller:", error.message);

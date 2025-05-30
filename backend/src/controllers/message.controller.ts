@@ -9,7 +9,7 @@ import cloudinary from "../lib/cloudinary.js";
  * 
  * @param {Request} req - The request object, containing the chat ID in params.
  * @param {Response} res - The response object used to send back the list of messages.
- * @returns {void} - Sends a list of messages with status 200 if successful, otherwise an error message.
+ * @returns {any} - Sends a list of messages with status 200 if successful, otherwise an error message.
  */
 export const getChatMessages = async (req: Request, res: Response): Promise<any> => {
     try {
@@ -41,7 +41,7 @@ export const getChatMessages = async (req: Request, res: Response): Promise<any>
  *
  * @param {Request} req - The request object, containing the message content and chatId.
  * @param {Response} res - The response object used to send back the new message.
- * @returns {void}
+ * @returns {any}
  */
 export const sendChatMessage = async (req: Request, res: Response): Promise<any> => {
     try {
