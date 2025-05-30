@@ -147,7 +147,7 @@ export const getChatsList = async (req: Request, res: Response): Promise<any> =>
  *
  * @param {Request} req - The request object containing the authenticated user, chatId param, and memberIds in body.
  * @param {Response} res - The response object used to send updated chat back to client.
- * @returns {any}
+ * @returns {any} - Sends back the updated chat in JSOn with a status 200 if successful, otherwise an error message.
  */
 export const addMembersToGroupChat = async (req: Request, res: Response): Promise<any> => {
     try {
@@ -250,7 +250,7 @@ export const leaveGroupChat = async (req: Request, res: Response): Promise<any> 
  *
  * @param {Request} req - The request object with chatId param and new name in body.
  * @param {Response} res - The response object used to return updated chat or errors.
- * @returns {any}
+ * @returns {any} - Sends back the chat in JSON with a status 200 if successful, otherwise an error message.
  */
 export const renameGroupChat = async (req: Request, res: Response): Promise<any> => {
     try {

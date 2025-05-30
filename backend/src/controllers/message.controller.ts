@@ -41,7 +41,7 @@ export const getChatMessages = async (req: Request, res: Response): Promise<any>
  *
  * @param {Request} req - The request object, containing the message content and chatId.
  * @param {Response} res - The response object used to send back the new message.
- * @returns {any}
+ * @returns {any} - Sends back the sent message with a status 201 if successful, otherwise an error message.
  */
 export const sendChatMessage = async (req: Request, res: Response): Promise<any> => {
     try {
