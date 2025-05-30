@@ -144,6 +144,50 @@ export const getChatsList = async (req: Request, res: Response): Promise<any> =>
 };
 
 /**
+ * Adds new members to a group chat.
+ *
+ * @param {Request} req - The request object containing the chatId param, and memberIds in body.
+ * @param {Response} res - The response object used to send updated chat back to client.
+ * @returns {void}
+ */
+export const addMembersToGroupChat = async (req: Request, res: Response): Promise<any> => {
+    try {
+        const { chatId } = req.params; // ID of the chat to add to
+        const { memberIds } = req.body; // the IDs of the users to add as members
+
+        // Check that at least one member ID was passed in 
+        if (!Array.isArray(memberIds) || memberIds.length === 0) {
+            return res.status(400).json({ message: "You must include at least one user to add as a member." });
+        }
+
+        const chat = await Chat.findById(chatId);
+        if (!chat) {
+            return res.status(404).json({ message: "Chat not found." });
+        }
+
+        // Check that the chat is a group chat (i.e. is not a Direct Message (DM))
+        if (!chat.isGroup) {
+            return res.status(400).json({ message: "You can only add members to group chats." });
+        }
+
+        // Add the new members to the chat's members array
+        const updatedChat = await Chat.findByIdAndUpdate(
+            chatId,
+            { $addToSet: { members: { $each: memberIds } } }, // add each memberId to the members array
+            { new: true } // Returns the updated document instead of the original one
+        ).populate("members", "-password"); // populate the members field with user details (excl. passwords)
+
+        // Send the updated chat back to the client in json, with 200 OK status
+        res.status(200).json(updatedChat);
+
+    } catch (error: unknown) {
+        console.log("Error in addMembersToGroupChat controller:", error);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+};
+
+
+/**
  * Allows a user to leave a group chat they are a member of.
  * Only works for group chats as Direct messages (DMs) cannot be left.
  *
