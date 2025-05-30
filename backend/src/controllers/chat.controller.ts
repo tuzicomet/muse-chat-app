@@ -188,7 +188,11 @@ export const addMembersToGroupChat = async (req: Request, res: Response): Promis
         res.status(200).json(updatedChat);
 
     } catch (error: unknown) {
-        console.log("Error in addMembersToGroupChat controller:", error);
+        if (error instanceof Error) {
+            console.log("Error in leaveGroupChat controller:", error.message);
+        } else {
+            console.log("Unexpected error in leaveGroupChat controller:", error);
+        }
         res.status(500).json({ message: "Internal Server Error" });
     }
 };
