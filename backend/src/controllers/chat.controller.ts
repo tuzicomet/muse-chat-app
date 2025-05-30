@@ -99,7 +99,6 @@ export const getChat = async (req: Request, res: Response): Promise<any> => {
         res.status(200).json(chat);
 
     } catch (error: unknown) {
-        // Type guard to check if the error is an instance of Error
         if (error instanceof Error) {
             console.log("Error in getChat controller:", error.message);
         } else {
@@ -133,7 +132,6 @@ export const getChatsList = async (req: Request, res: Response): Promise<any> =>
         return res.status(200).json(chats);
 
     } catch (error: unknown) {
-        // Type guard to check if the error is an instance of Error
         if (error instanceof Error) {
             console.log("Error in getChatsList controller", error.message);
         } else {
@@ -189,14 +187,13 @@ export const addMembersToGroupChat = async (req: Request, res: Response): Promis
 
     } catch (error: unknown) {
         if (error instanceof Error) {
-            console.log("Error in leaveGroupChat controller:", error.message);
+            console.log("Error in addMembersToGroupChat controller:", error.message);
         } else {
-            console.log("Unexpected error in leaveGroupChat controller:", error);
+            console.log("Unexpected error in addMembersToGroupChat controller:", error);
         }
         res.status(500).json({ message: "Internal Server Error" });
     }
 };
-
 
 /**
  * Allows a user to leave a group chat they are a member of.
@@ -243,6 +240,52 @@ export const leaveGroupChat = async (req: Request, res: Response): Promise<any> 
             console.log("Error in leaveGroupChat controller:", error.message);
         } else {
             console.log("Unexpected error in leaveGroupChat controller:", error);
+        }
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+};
+
+/**
+ * Renames a group chat.
+ *
+ * @param {Request} req - The request object with chatId param and new name in body.
+ * @param {Response} res - The response object used to return updated chat or errors.
+ * @returns {void}
+ */
+export const renameGroupChat = async (req: Request, res: Response): Promise<any> => {
+    try {
+        const { chatId } = req.params;
+        const { name } = req.body;
+        const userId = req.user._id;
+
+        if (!name || name.trim().length === 0) {
+            return res.status(400).json({ message: "Name cannot be empty." });
+        }
+
+        const chat = await Chat.findById(chatId);
+        if (!chat) {
+            return res.status(404).json({ message: "Chat not found." });
+        }
+
+        if (!chat.isGroup) {
+            return res.status(400).json({ message: "Only group chats can be renamed." });
+        }
+
+        if (!chat.members.includes(userId)) {
+            return res.status(403).json({ message: "You are not a member of this chat." });
+        }
+
+        chat.name = name;
+        await chat.save();
+        const populatedChat = await chat.populate("members", "-password");
+
+        res.status(200).json(populatedChat);
+        
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            console.log("Error in renameGroupChat controller:", error.message);
+        } else {
+            console.log("Unexpected error in renameGroupChat controller:", error);
         }
         res.status(500).json({ message: "Internal Server Error" });
     }

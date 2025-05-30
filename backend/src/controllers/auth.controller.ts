@@ -134,7 +134,6 @@ export const login = async (req: Request, res: Response): Promise<any> => {
         });
 
     } catch (error: unknown) {
-        // Type guard to check if the error is an instance of Error
         if (error instanceof Error) {
             console.log("Error in login controller", error.message);
         } else {
@@ -163,7 +162,6 @@ export const logout = async (req: Request, res: Response): Promise<any> => {
         res.status(200).json({ message: "Logged out successfully" });
 
     } catch (error: unknown) {
-        // Type guard to check if the error is an instance of Error
         if (error instanceof Error) {
             console.log("Error in logout controller", error.message);
         } else {
@@ -220,7 +218,6 @@ export const updateProfile = async (req: Request, res: Response): Promise<any> =
         res.status(200).json(updatedUser);
 
     } catch (error: unknown) {
-        // Type guard to check if the error is an instance of Error
         if (error instanceof Error) {
             console.log("Error in updateProfile controller", error.message);
         } else {
@@ -252,7 +249,6 @@ export const checkAuth = async (req: Request, res: Response): Promise<any> => {
         // If this runs, protectRoute already verified the token and attached the user to req.user
         res.status(200).json(req.user);
     } catch (error: unknown) {
-        // Type guard to check if the error is an instance of Error
         if (error instanceof Error) {
             console.log("Error in checkAuth controller", error.message);
         } else {
