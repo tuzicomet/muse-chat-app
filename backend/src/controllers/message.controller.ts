@@ -90,3 +90,47 @@ export const sendChatMessage = async (req: Request, res: Response): Promise<any>
         return res.status(500).json({ error: "Internal server error" });
     }
 };
+
+/**
+ * Deletes a specific message sent by the user.
+ * 
+ * Only the user who sent the message can delete it.
+ * 
+ * @param {Request} req - The request object containing the message ID in params and user ID from auth.
+ * @param {Response} res - The response object used to return status or error.
+ * @returns {Promise<any>} - Sends status 200 if the deletion was successful, otherwise an error message.
+ */
+export const deleteMessage = async (req: Request, res: Response): Promise<any> => {
+    try {
+        // Get the id of the message to delete and the id of the current user from the request
+        const { messageId } = req.params;
+        const userId = req.user._id;
+
+        // Find the message with the given ID
+        const message = await Message.findById(messageId);
+
+        // Verify that the message exists
+        if (!message) {
+            return res.status(404).json({ message: "Message not found." });
+        }
+
+        // Check that the currently authenticated user is the one who sent the message
+        if (message.senderId.toString() !== userId.toString()) {
+            return res.status(403).json({ message: "You can only delete your own messages." });
+        }
+
+        // If all checks passed, delete the message from the database
+        await Message.findByIdAndDelete(messageId);
+
+        // Return 200 OK status with success message
+        return res.status(200).json({ message: "Message deleted successfully." });
+
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            console.log("Error in deleteMessage controller:", error.message);
+        } else {
+            console.log("Unexpected error in deleteMessage controller:", error);
+        }
+        return res.status(500).json({ message: "Internal Server Error" });
+    }
+};
