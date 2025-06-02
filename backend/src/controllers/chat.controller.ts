@@ -246,7 +246,7 @@ export const leaveGroupChat = async (req: Request, res: Response): Promise<any> 
 };
 
 /**
- * Renames a group chat.
+ * Allows an authenticated user to rename a group chat they are a member of.
  *
  * @param {Request} req - The request object with chatId param and new name in body.
  * @param {Response} res - The response object used to return updated chat or errors.
