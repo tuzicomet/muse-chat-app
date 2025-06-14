@@ -1,0 +1,38 @@
+import { create } from "zustand";
+import { axiosInstance } from "../lib/axios";
+
+// Zustand store for managing authentication-related state across the app
+// Zustand creates the store once then reuses it globally, including between page changes
+// Components can access or update auth state using the useAuthStore() hook
+// On initial load or refresh, checkAuth() should be called to verify if user is logged in
+export const useAuthStore = create((set) => ({
+    // The currently authenticated user (null if not logged in)
+    // Default to null until we verify if a user is logged in (via checkAuth)
+    authUser: null,
+
+    // Flags to indicate if certain actions are in progress
+    isSigningUp: false,
+    isLoggingIn: false,
+    isUpdatingProfile: false,
+
+    // Indicates whether we're still checking if the user is already authenticated
+    isCheckingAuth: true,
+
+    // Function to check if the user is currently authenticated
+    // Called on app start or refresh to determine if a user session exists
+    checkAuth: async () => {
+        try {
+            // Send GET request to backend endpoint to check auth status
+            const res = await axiosInstance.get("/auth/check");
+            // If successful, update authUser with the returned user data
+            set({ authUser: res.data });
+        } catch (error) {
+            console.log("Error in checkAuth:", error);
+            // If there's an error (e.g. not logged in), clear the authUser
+            set({ authUser: null });
+        } finally {
+            // Mark the auth check as completed, regardless of success/failure
+            set({ isCheckingAuth: false });
+        }
+    },
+}));
