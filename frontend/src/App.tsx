@@ -5,7 +5,7 @@ import LoginPage from "./pages/LoginPage";
 import SettingsPage from "./pages/SettingsPage";
 import ProfilePage from "./pages/ProfilePage";
 
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuthStore } from "./store/useAuthStore";
 import { useEffect } from "react";
 
@@ -24,7 +24,7 @@ const App = () => {
   console.log("Current authenticated user:", authUser);
 
   // If still checking authentication and no user is logged in yet
-  // show a loading spinner in the centre of the screen
+  // show a loading spinner in the centre of the screen instead of the main app UI
   if (isCheckingAuth && !authUser) 
     return (
       <div className = "flex items-center justify-center h-screen">
@@ -39,11 +39,11 @@ const App = () => {
 
       {/* Application routes for different pages */}
       <Routes>
-        <Route path = "/" element = {<HomePage />} />
-        <Route path = "/signup" element = {<SignUpPage />} />
-        <Route path = "/login" element = {<LoginPage />} />
+        <Route path = "/" element = {authUser ? <HomePage /> : <Navigate to="/login"/>} />
+        <Route path = "/signup" element = {!authUser ? <SignUpPage /> : <Navigate to="/"/>} />
+        <Route path = "/login" element = {!authUser ? <LoginPage /> : <Navigate to="/"/>} />
         <Route path = "/settings" element = {<SettingsPage />} />
-        <Route path = "/profile" element = {<ProfilePage />} />
+        <Route path = "/profile" element = {authUser ? <ProfilePage /> : <Navigate to="/login"/>} />
       </Routes>
 
     </div>
