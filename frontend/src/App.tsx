@@ -9,10 +9,12 @@ import { Routes, Route } from "react-router-dom";
 import { useAuthStore } from "./store/useAuthStore";
 import { useEffect } from "react";
 
+import { Loader } from "lucide-react";
+
 // Root component for the app, responsible for rendering layout, routing, and managing global app logic
 const App = () => {
   // Get the current authenticated user and the checkAuth function from Zustand store
-  const { authUser, checkAuth } = useAuthStore();
+  const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
 
   // On component mount, call checkAuth to verify if user is logged in
   useEffect(() => {
@@ -20,6 +22,15 @@ const App = () => {
   }, [checkAuth]);
 
   console.log("Current authenticated user:", authUser);
+
+  // If still checking authentication and no user is logged in yet
+  // show a loading spinner in the centre of the screen
+  if (isCheckingAuth && !authUser) 
+    return (
+      <div className = "flex items-center justify-center h-screen">
+        <Loader className = "size-10 animate-spin"/>
+      </div>
+    );
 
   return (
     <div>
