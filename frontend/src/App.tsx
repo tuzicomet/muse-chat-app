@@ -7,12 +7,14 @@ import ProfilePage from "./pages/ProfilePage";
 
 import { Routes, Route } from "react-router-dom";
 
+// Root component for the app, responsible for rendering layout, routing, and managing global app logic
 const App = () => {
   return (
     <div>
-
+      {/* Navigation bar shown on every page */}
       <Navbar />
 
+      {/* Application routes for different pages */}
       <Routes>
         <Route path = "/" element = {<HomePage />} />
         <Route path = "/signup" element = {<SignUpPage />} />
