@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 // Sign up form fields
 interface FormData {
-  fullName: string;
+  name: string;
   email: string;
   password: string;
 }
@@ -15,7 +15,8 @@ const SignUpPage = () => {
 
   // State for user input in the signup form
   const [formData, setFormData] = useState<FormData>({
-    fullName: "",
+    // all fields set to empty string by default
+    name: "",
     email: "",
     password: "",
   });
@@ -37,10 +38,10 @@ const SignUpPage = () => {
 
         {/* Signup form */}
         <form className="space-y-6">
-          {/* Full Name input */}
+          {/* Display Name input */}
           <div className="form-control">
             <label className="label">
-              <span className="label-text font-medium">Full Name</span>
+              <span className="label-text font-medium">Display Name</span>
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -49,9 +50,9 @@ const SignUpPage = () => {
               <input
                 type="text"
                 className="input input-bordered w-full pl-10"
-                placeholder="John Doe"
-                value={formData.fullName}
-                onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
+                placeholder="MuseUser"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               />
             </div>
           </div>
@@ -105,7 +106,7 @@ const SignUpPage = () => {
             </div>
           </div>
 
-          {/* Submit button (placeholder only for UI) */}
+          {/* Submit button */}
           <button type="button" className="btn btn-primary w-full">
             Create Account
           </button>
