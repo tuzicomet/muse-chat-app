@@ -22,12 +22,15 @@ const SignUpPage = () => {
   });
 
   return (
+    // Full-height screen with centered form
     <div className="min-h-screen flex justify-center items-center p-6 sm:p-12">
-      {/* Centered container for the form */}
+      {/* Bounded container for the form content */}
       <div className="w-full max-w-md space-y-8">
+
         {/* Logo and heading */}
         <div className="text-center mb-8">
           <div className="flex flex-col items-center gap-2 group">
+            {/* Logo icon */}
             <div className="size-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
               <MessageSquare className="size-6 text-primary" />
             </div>
@@ -38,15 +41,18 @@ const SignUpPage = () => {
 
         {/* Signup form */}
         <form className="space-y-6">
+
           {/* Display Name input */}
           <div className="form-control">
             <label className="label">
               <span className="label-text font-medium">Display Name</span>
             </label>
             <div className="relative">
+              {/* User icon */}
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <User className="size-5 text-base-content/40" />
               </div>
+              {/* Display name text input */}
               <input
                 type="text"
                 className="input input-bordered w-full pl-10"
@@ -63,9 +69,11 @@ const SignUpPage = () => {
               <span className="label-text font-medium">Email</span>
             </label>
             <div className="relative">
+              {/* Mail icon */}
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <Mail className="size-5 text-base-content/40" />
               </div>
+              {/* Email input field */}
               <input
                 type="email"
                 className="input input-bordered w-full pl-10"
@@ -76,15 +84,18 @@ const SignUpPage = () => {
             </div>
           </div>
 
-          {/* Password input */}
+          {/* Password input field with show/hide toggle */}
           <div className="form-control">
             <label className="label">
               <span className="label-text font-medium">Password</span>
             </label>
             <div className="relative">
+              {/* Lock icon */}
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <Lock className="size-5 text-base-content/40" />
               </div>
+              {/* Password input field. 
+              If showPassword is true, display the text, otherwise mask it as a password */}
               <input
                 type={showPassword ? "text" : "password"}
                 className="input input-bordered w-full pl-10"
@@ -92,6 +103,7 @@ const SignUpPage = () => {
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
               />
+              {/* Toggle button to show/hide password */}
               <button
                 type="button"
                 className="absolute inset-y-0 right-0 pr-3 flex items-center"
